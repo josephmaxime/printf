@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 #include "main.h"
 /**
  * _printf - new printf function
@@ -16,7 +17,7 @@ int _printf(const char *format, ...)
 
 	va_start(ap, format); /* initialization */
 	i = 0;
-	length = 0;
+	/* length = 0; */
 	number_char = 0;
 	/* while (format[length]) */
 	/*	length++; */
