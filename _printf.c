@@ -51,4 +51,5 @@ int _printf(const char *format, ...)
 	}
 	va_end(ap); /* clean up */
 	number_char++;
+	return (number_char);
 }
