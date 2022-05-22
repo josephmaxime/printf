@@ -1,56 +1,90 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
 #include "main.h"
-/**
- * _printf - new printf function
- *
- * @format: list of type
- *
- */
-int _printf(const char *format, ...)
-{
-	va_list ap;
-	unsigned int i, number_char;
-	char *string;
+#include <stddef.h>
 
-	va_start(ap, format); /* initialization */
-	i = 0;
-	/* length = 0; */
-	number_char = 0;
-	/* while (format[length]) */
-	/*	length++; */
-	while (format[i] != '\0') /* != NULL && *(format + i) != '\0') */
+/**
+ * get_op - select function for conversion char
+ *
+ * @c: char to check
+ *
+ * Return: pointer to function
+ */
+int (*get_op(const char c))(va_list)
+{
+	int i = 0;
+	flags_p fp[] = {
+		{"c", print_char},
+		{"s", print_str},
+		{"i", print_nbr},
+		{"d", print_nbr},
+		{"b", print_binary},
+		{"o", print_octal},
+		{"x", print_hexa_lower},
+		{"X", print_hexa_upper},
+		{"u", print_unsigned},
+		{"S", print_str_unprintable},
+		{"r", print_str_reverse},
+		{"p", print_ptr},
+		{"R", print_rot13},
+		{"%", print_percent}
+	};
+
+	while (i < 14)
 	{
-		switch (format[i])
+		if (c == fp[i].c[0])
 		{
-			case ('c'):
-				printf("%c", va_arg(ap, int));
-				number_char++;
-				break;
-			case ('i'):
-				printf("%d", va_arg(ap, int));
-				number_char++;
-				break;
-			case ('f'):
-				printf("%f", va_arg(ap, double));
-				number_char++;
-				break;
-			case ('s'):
-				string = va_arg(ap, char *);
-				if (!string)
-				{
-					printf("(nil)");
-					break;
-				}
-				printf("%s", string);
-				number_char += strlen(string);
-				break;
+			return (fp[i].f);
 		}
 		i++;
 	}
-	va_end(ap); /* clean up */
-	number_char++;
-	return (number_char);
+	return (NULL);
+}
+/**
+ * _printf - Reproduce behavior of printf function
+ *
+ * @format: format string
+ *
+ * Return: value of printed chars
+ *
+ */
+
+int _printf(const char *format, ...)
+{
+	va_list ap;
+	int sum = 0, i = 0;
+	int (*func)();
+
+	if (!format || (format[0] == '%' && format[1] == '\0'))
+		return (-1);
+	va_start(ap, format);
+	while (format[i])
+	{
+		if (format[i] == '%')
+		{
+			if (format[i + 1] != '\0')
+				func = get_op(format[i + 1]);
+			if (func == NULL)
+			{
+				putchar(format[i]);
+				sum++;
+				i++;
+			}
+			else
+			{
+				sum += func(ap);
+				i += 2;
+				continue;
+			}
+		}
+		else
+		{
+			putchar(format[i]);
+			sum++;
+			i++;
+		}
+	}
+	va_end(ap);
+	return (sum);
 }
