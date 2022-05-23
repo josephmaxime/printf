@@ -67,7 +67,7 @@ int _printf(const char *format, ...)
 				func = get_op(format[i + 1]);
 			if (func == NULL)
 			{
-				putchar(format[i]);
+				_putchar(format[i]);
 				sum++;
 				i++;
 			}
@@ -80,7 +80,7 @@ int _printf(const char *format, ...)
 		}
 		else
 		{
-			putchar(format[i]);
+			_putchar(format[i]);
 			sum++;
 			i++;
 		}

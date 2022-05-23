@@ -18,13 +18,13 @@ int print_unsigned_number(unsigned int n)
 
 	if (nb <= 9)
 	{
-		putchar(nb + '0');
+		_putchar(nb + '0');
 		return (1);
 	}
 	if (nb > 9)
 	{
 		count = print_unsigned_number(nb / 10) + 1;
-		putchar(nb % 10 + '0');
+		_putchar(nb % 10 + '0');
 		return (count);
 	}
 	return (0);
@@ -45,19 +45,19 @@ int print_number(int n)
 	nb = n;
 	if (n < 0)
 	{
-		putchar('-');
+		_putchar('-');
 		count++;
 		nb = -nb;
 	}
 	if (nb <= 9)
 	{
-		count += putchar(nb + '0');
+		count += _putchar(nb + '0');
 		return (count);
 	}
 	if (nb > 9)
 	{
 		count += print_number(nb / 10) + 1;
-		putchar(nb % 10 + '0');
+		_putchar(nb % 10 + '0');
 		return (count);
 	}
 	return (0);
